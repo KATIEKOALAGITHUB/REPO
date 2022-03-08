@@ -41,10 +41,58 @@ gg_base +
   )
 
 
+
 gg_base + 
-  geom_point(color = "green4",
-             pch = 15,
+  geom_smooth(color = "green4",
+             pch = 8,
              size = 2,
              alpha = 1)
-             
-             
+   gg_base + 
+  geom_point(
+    aes(size = visitors,
+        color = visitors),
+    alpha = 0.5
+  )          
+
+   gg_base + 
+  geom_col(aes(fill = visitors))          
+
+gg_base +
+  geom_point(
+    aes(size = visitors,
+        color = visitors),
+    alpha = 0.5
+  ) +
+  theme_minimal()
+  
+  gg_base +
+  geom_line(
+    color = "green4",
+    linetype = "dashed"
+  ) +
+  theme_light()
+
+  gg_base +
+  geom_line(linetype = "dotted") +
+  theme_bw() +
+  labs(
+    x = "Year",
+    y = "Annual park visitors",
+    title = "Channel Islands NP Visitation",
+    subtitle = "(1963 - 2016)"
+  )
+# Label formatters
+library(scales)   # Need the scales package
+example scale code:  #bp + scale_y_continuous(labels=percent) +
+     scale_x_discrete(labels=abbreviate)  # 
+
+  gg_base +
+  geom_line(linetype = "dotted") +
+  theme_bw() +
+  labs(
+    x = "Year",
+    y = "Annual park visitors",
+    title = "Channel Islands NP Visitation",
+    subtitle = "(1963 - 2016)"
+  ) + scale_y_continuous(labels=comma)
+  
