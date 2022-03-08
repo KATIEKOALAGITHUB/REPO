@@ -1,0 +1,9 @@
+title: "Creating graphs in R with `ggplot2`"
+author: "Katie"
+date: "8/3/22"
+output: html_document
+---
+
+# Plots with ggplot2
+
+Test plots wit R for R4Excel Course.---
