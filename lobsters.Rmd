@@ -1,0 +1,120 @@
+---
+title: "r4excelCourse_lobsters"
+author: "Katie"
+date: "08/03/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+## attach libraries
+library(tidyverse)
+library(readxl)
+library(here)
+install.packages('skimr')
+library(skimr) 
+install.packages('kableExtra')
+library(kableExtra)  
+
+## read in data
+lobsters <- read_xlsx(here("data/lobsters.xlsx"), skip=4)
+
+# explore data
+skimr::skim(lobsters) 
+
+# group & summarise data
+# data %>% # take this data "and then"
+  # group_by() %>% # group by "and then"
+  # summarize() # summarize by #
+  
+# “take the lobsters data and then group_by year and then summarize by count in a new column we’ll call count_by_year.” #
+
+lobsters %>%
+  group_by(year) %>%
+  summarize(count_by_year = n())
+
+
+lobsters %>%
+  group_by(site, year) %>%
+  summarize(count_by_siteyear =  n())
+
+lobsters %>%
+  group_by(site, year) %>%
+  summarize(count_by_siteyear =  n(),
+            mean_size_mm = mean(size_mm))
+
+lobsters %>%
+  group_by(site, year) %>%
+  summarize(count_by_siteyear =  n(), 
+            mean_size_mm = mean(size_mm, na.rm=TRUE), 
+            sd_size_mm = sd(size_mm, na.rm=TRUE))
+
+siteyear_summary <- lobsters %>%
+  group_by(site, year) %>%
+  summarize(count_by_siteyear =  n(), 
+            mean_size_mm = mean(size_mm, na.rm = TRUE), 
+            sd_size_mm = sd(size_mm, na.rm = TRUE))
+
+## `summarise()` regrouping output by 'site' (override with `.groups` argument)
+
+## inspect our new variable 
+siteyear_summary 
+
+## make a table with our new variable
+siteyear_summary %>%
+  kable()
+  
+siteyear_summary <- lobsters %>%
+  group_by(site, year) %>%
+  summarize(count_by_siteyear =  n(), 
+            mean_size_mm = mean(size_mm, na.rm = TRUE), 
+            sd_size_mm = sd(size_mm, na.rm = TRUE), 
+            median_size_mm = median(size_mm, na.rm = TRUE))
+
+
+## a ggplot option:
+ggplot(data = siteyear_summary, aes(x = year, y = median_size_mm, color = site)) +
+ geom_point(pch = 15,
+             size = 4,
+             alpha = 0.5) +
+  labs(
+    x = "Year",
+    y = "Median Lobster Size",
+    title = "Change in Median Lobster Size",
+    subtitle = "(2012 - 2016)")
+
+ggsave(here("figures", "lobsters-points.png"))
+
+
+## another option:
+ggplot(siteyear_summary, aes(x = year, y = median_size_mm)) +
+  geom_col() +
+  facet_wrap(~site) +
+ theme_grey() + 
+ theme(axis.text = element_text(size = 6)) 
+ 
+ggsave(here("figures", "lobsters-col.png"))
+
