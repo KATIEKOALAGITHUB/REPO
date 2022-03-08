@@ -424,6 +424,26 @@ pre code {
 <p>ggplot(siteyear_summary, aes(x = year, y = median_size_mm)) + geom_col() + facet_wrap(~site) + theme_grey() + theme(axis.text = element_text(size = 6))</p>
 <p>ggsave(here(“figures”, “lobsters-col.png”))</p>
 </div>
+<div id="read-in-data-1" class="section level2">
+<h2>read in data</h2>
+<p>lobsters &lt;- read_xlsx(here(“data/lobsters2.xlsx”), skip=4)</p>
+<p>siteyear_summary &lt;- lobsters %&gt;% group_by(site, year) %&gt;% summarize(count_by_siteyear = n(), mean_size_mm = mean(size_mm, na.rm = TRUE), sd_size_mm = sd(size_mm, na.rm = TRUE), median_size_mm = median(size_mm, na.rm = TRUE), )</p>
+</div>
+<div id="a-ggplot-option-1" class="section level2">
+<h2>a ggplot option:</h2>
+<p>ggplot(data = siteyear_summary, aes(x = year, y = median_size_mm, color = site)) + geom_point(pch = 15, size = 4, alpha = 0.5) + labs( x = “Year”, y = “Median Lobster Size”, title = “Change in Median Lobster Size”, subtitle = “(2012 - 2016)”)</p>
+<p>ggsave(here(“figures”, “lobsters-points.png”))</p>
+</div>
+<div id="another-option-1" class="section level2">
+<h2>another option:</h2>
+<p>ggplot(siteyear_summary, aes(x = year, y = median_size_mm)) + geom_col() + facet_wrap(~site) + theme_grey() + theme(axis.text = element_text(size = 6))</p>
+<p>ggsave(here(“figures”, “lobsters-col.png”))</p>
+</div>
+<div id="a-ggplot-option-2" class="section level2">
+<h2>a ggplot option:</h2>
+<p>ggplot(data = siteyear_summary, aes(x = year, y = median_size_mm, color = site)) + geom_line()</p>
+<p>ggsave(here(“figures”, “lobsters-line.png”))</p>
+</div>
 </div>
 
 

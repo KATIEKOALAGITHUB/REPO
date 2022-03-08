@@ -118,3 +118,42 @@ ggplot(siteyear_summary, aes(x = year, y = median_size_mm)) +
  
 ggsave(here("figures", "lobsters-col.png"))
 
+## read in data
+lobsters <- read_xlsx(here("data/lobsters2.xlsx"), skip=4)
+
+siteyear_summary <- lobsters %>%
+  group_by(site, year) %>%
+  summarize(count_by_siteyear =  n(), 
+            mean_size_mm = mean(size_mm, na.rm = TRUE), 
+            sd_size_mm = sd(size_mm, na.rm = TRUE), 
+            median_size_mm = median(size_mm, na.rm = TRUE), )
+
+## a ggplot option:
+ggplot(data = siteyear_summary, aes(x = year, y = median_size_mm, color = site)) +
+ geom_point(pch = 15,
+             size = 4,
+             alpha = 0.5) +
+  labs(
+    x = "Year",
+    y = "Median Lobster Size",
+    title = "Change in Median Lobster Size",
+    subtitle = "(2012 - 2016)")
+
+ggsave(here("figures", "lobsters-points.png"))
+
+
+## another option:
+ggplot(siteyear_summary, aes(x = year, y = median_size_mm)) +
+  geom_col() +
+  facet_wrap(~site) +
+ theme_grey() + 
+ theme(axis.text = element_text(size = 6)) 
+ 
+ggsave(here("figures", "lobsters-col.png"))
+
+## a ggplot option:
+ggplot(data = siteyear_summary, aes(x = year, y = median_size_mm, color = site)) +
+  geom_line() 
+  
+  ggsave(here("figures", "lobsters-line.png"))
+
