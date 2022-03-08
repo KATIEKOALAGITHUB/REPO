@@ -356,6 +356,14 @@ pre code {
 <div id="plots-with-ggplot2" class="section level1">
 <h1>Plots with ggplot2</h1>
 <p>Test plots wit R for R4Excel Course.—</p>
+<p>library(tidyverse) library(readxl) library(here)</p>
+<p>ca_np &lt;- read_csv(here(“data”, “ca_np.csv”))</p>
+<p>names(ca_np) head(ca_np) summary(ca_np)</p>
+<p>ci_np &lt;- read_excel(here(“data”, “ci_np.xlsx”))</p>
+<p>Code for ggplot graphs: “ggplot(data = df_name, aes(x = x_var_name, y = y_var_name)) + geom_type()”</p>
+<p>ggplot(data = ci_np, aes(x = year, y = visitors)) + geom_line()</p>
+<p>ggplot(data = ci_np, aes(x = year, y = visitors)) + geom_point()</p>
+<p>ggplot(data = ci_np, aes(x = year, y = visitors)) + geom_col()</p>
 </div>
 
 
