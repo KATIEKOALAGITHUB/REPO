@@ -443,6 +443,9 @@ pre code {
 <h2>a ggplot option:</h2>
 <p>ggplot(data = siteyear_summary, aes(x = year, y = median_size_mm, color = site)) + geom_line()</p>
 <p>ggsave(here(“figures”, “lobsters-line.png”))</p>
+<p>lobsters %&gt;% mutate(size_m = size_mm / 1000)</p>
+<p>lobsters_detailed &lt;- lobsters %&gt;% mutate(size_m = size_mm / 1000, millenia = 2000, observer = “Allison Horst”)</p>
+<p>lobsters_detailed %&gt;% select(date, site, size_m)</p>
 </div>
 </div>
 

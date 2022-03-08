@@ -156,4 +156,15 @@ ggplot(data = siteyear_summary, aes(x = year, y = median_size_mm, color = site))
   geom_line() 
   
   ggsave(here("figures", "lobsters-line.png"))
+  
+lobsters %>%
+  mutate(size_m = size_mm / 1000)
+
+lobsters_detailed <- lobsters %>%
+  mutate(size_m = size_mm / 1000, 
+         millenia = 2000,
+         observer = "Allison Horst")
+
+lobsters_detailed %>%
+  select(date, site, size_m)
 
