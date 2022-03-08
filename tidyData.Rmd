@@ -1,0 +1,40 @@
+---
+title: "tidyr"
+author: "Katie"
+date: "08/03/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+# Attach packages
+library(tidyverse)
+install.packages("janitor")
+library(janitor)
+library(here)
+library(readxl)
+
+inverts <- read_excel(here("data", "inverts.xlsx"))
+
+inverts_triple_unite <- inverts_long %>% 
+  tidyr::unite(col = "year_site_name",
+               c(year, site, common_name),
+               sep = "-") # Note: this is a dash
+
+
+   inverts_sep <- inverts_unite %>% 
+  tidyr::separate(site_year, into = c("my_site", "my_year"))            
+
+ ca_abbr <- inverts %>% 
+  mutate(
+    common_name = 
+      str_replace(common_name, 
+              pattern = "california", 
+              replacement = "CA")
+  ) 
+
+  
