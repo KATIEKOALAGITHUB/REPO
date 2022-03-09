@@ -81,4 +81,79 @@ knitr::kable(my_fish_join)
                 full_width = FALSE)
 ```
 
+library(tidyverse)
+library(here)  
+library(janitor) 
+install.packages("paletteer")
+library(paletteer) 
+
+us_landings <- read_csv(here("data","noaa_landings.csv"),
+                        na = "no data")
+
+summary(us_landings)
+View(us_landings)
+names(us_landings)
+head(us_landings)
+tail(us_landings)
+salmon_clean <- us_landings %>% 
+  clean_names() %>% # Make column headers snake_case
+  mutate(
+    afs_name = str_to_lower(afs_name)
+  ) %>% # Converts character columns to lowercase
+  mutate(dollars_num = parse_number(dollars_usd)) %>% # Just keep numbers from $ column
+  filter(str_detect(afs_name, pattern = "salmon")) %>% # Only keep entries w/"salmon"
+  separate(afs_name, into = c("group", "subgroup"), sep = ", ") %>% # Note comma-space
+  drop_na(dollars_num) # Drop (listwise deletion) any observations with NA for dollars_num
+
+
+```{r}
+salmon_us_annual <- salmon_clean %>% 
+  group_by(year, subgroup) %>% 
+  summarize(
+    tot_value = sum(dollars_num, na.rm = TRUE),)
+```
+#plot of salmon by year by sub-group
+
+```{r}
+salmon_gg <- 
+  ggplot(salmon_us_annual, 
+         aes(x = year, y = tot_value, group = subgroup)) +
+  geom_line(aes(color = subgroup)) +
+  theme_bw() +
+  labs(x = "year", y = "US commercial salmon value (USD)")
+```
+salmon_gg <- 
+  ggplot(salmon_us_annual, 
+         aes(x = year, y = tot_value, group = subgroup)) +
+  geom_line(aes(color = subgroup)) +
+  theme_bw() +
+  labs(x = "year", y = "US commercial salmon value (USD)")
+
+salmon_us_annual <- salmon_clean %>% 
+  group_by(year, subgroup) %>% 
+  summarize(
+    tot_value = sum(dollars_num, na.rm = TRUE),
+  )
+  
+salmonplot <- 
+  ggplot(salmon_us_annual, 
+         aes(x = year, y = tot_value, group = subgroup)) +
+  geom_line(aes(color = subgroup)) +
+  theme_bw() +
+  labs(x = "year", y = "US commercial salmon value (USD)")
+
+ggplot(salmon_us_annual, 
+         aes(x = year, y = tot_value, group = subgroup)) +
+  geom_line(aes(color = subgroup)) +
+  theme_bw() +
+  labs(x = "year", y = "US commercial salmon value (USD)")
+  
+View(palettes_d_names)
+ ggplot(salmon_us_annual, 
+         aes(x = year, y = tot_value, group = subgroup)) +
+  geom_line(aes(color = subgroup)) +
+  theme_bw() +
+  labs(x = "year", y = "US commercial salmon value (USD)") +
+  scale_color_paletteer_d("RSkittleBrewer::smarties")
+
 
